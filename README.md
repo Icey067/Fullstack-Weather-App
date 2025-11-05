@@ -6,8 +6,7 @@ A full-stack weather application using a Kotlin Android frontend and a Flask (Py
 
 | Home Screen | Forecast View |
 | :---: | :---: |
-| ![App Home Screen](./assets/app.png) | ![App Forecast View](./assets/forecast.png) |
-
+| ![App Home Screen](./assests/app.png) | ![App Forecast View](./assests/forcast.png) |
 ## ✨ Features
 
 * **Current Weather:** Get real-time temperature, "feels like" temperature, humidity, and wind speed.
