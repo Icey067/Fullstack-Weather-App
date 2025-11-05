@@ -1,0 +1,22 @@
+# --- Android Studio ---
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+/.idea/tasks.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+
+# --- Python ---
+__pycache__/
+*.pyc
+venv/
+*.env
+.env
+
+# --- Operating System ---
+.DS_Store
+Thumbs.db
