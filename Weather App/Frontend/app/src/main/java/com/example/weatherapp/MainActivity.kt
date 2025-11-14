@@ -6,31 +6,24 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weatherapp.ui.theme.WeatherAppTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.net.URL
 
-@Composable
-fun WeatherAppTheme(content: @Composable () -> Unit) {
-    MaterialTheme(
-        content = content
-    )
-}
-
 data class WeatherData(
     val city: String,
     val temperature: Double,
     val description: String,
     val humidity: Int,
-    val windSpeed: Double
+    val aqi: String
 )
 
 class MainActivity : ComponentActivity() {
@@ -69,6 +62,7 @@ fun WeatherScreen() {
 
         scope.launch {
             try {
+                // Make sure this IP is still correct!
                 val apiUrl = "http://192.168.1.14:5000/weather?city=${city.trim()}"
                 val response = withContext(Dispatchers.IO) { URL(apiUrl).readText() }
                 val json = JSONObject(response)
@@ -81,7 +75,7 @@ fun WeatherScreen() {
                         temperature = json.getDouble("temperature"),
                         description = json.getString("description").replaceFirstChar { it.uppercase() },
                         humidity = json.getInt("humidity"),
-                        windSpeed = json.getDouble("wind_speed")
+                        aqi = json.getString("aqi_description")
                     )
                     weatherData = data
                 }
@@ -97,6 +91,7 @@ fun WeatherScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .statusBarsPadding()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -149,7 +144,8 @@ fun WeatherScreen() {
 fun WeatherInfoCard(data: WeatherData) {
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -166,7 +162,7 @@ fun WeatherInfoCard(data: WeatherData) {
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
                 InfoItem(label = "Humidity", value = "${data.humidity}%")
-                InfoItem(label = "Wind Speed", value = "${data.windSpeed} m/s")
+                InfoItem(label = "AQI", value = data.aqi)
             }
         }
     }
@@ -179,4 +175,3 @@ fun InfoItem(label: String, value: String) {
         Text(text = value, fontSize = 18.sp, fontWeight = FontWeight.Medium)
     }
 }
-
